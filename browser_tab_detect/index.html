@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Browser Tab Detect</title>
+</head>
+<body>
+    
+</body>
+<script>
+function onDuplicated(tabInfo) {
+  console.log(tabInfo.id);
+}
+
+function onError(error) {
+  console.log(`Error: ${error}`);
+}
+
+// Duplicate the first tab in the array
+function duplicateFirstTab(tabs) {
+  console.log(tabs);
+  if (tabs.length > 0) {
+    var duplicating = browser.tabs.duplicate(tabs[0].id);
+    duplicating.then(onDuplicated, onError);
+  }
+}
+
+// Query for all open tabs
+var querying = browser.tabs.query({});
+querying.then(duplicateFirstTab, onError);
+</script>
+</html>

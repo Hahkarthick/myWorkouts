@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cross Browser Enabled</title>
+</head> 
+<body>
+    <div class="status">
+
+    </div>
+</body>
+<script>
+const redirectUrl = 'http://www.google.com';
+if (!(sessionAction('check','browserTabDetect'))) {
+    if (sessionAction('check', 'duplicateBrowserTab')) {
+        sessionAction('create','duplicateBrowserTab',true);
+    }
+}
+if (sessionAction('check','browserTabDetect')) {
+    // create a session
+    sessionAction('create','browserTabDetect',true);
+}
+window.onload = function(e){
+    if (!(sessionAction('check', 'duplicateBrowserTab'))) {
+        var result = alert('Another tab detected');
+        if (result === null) {
+            window.location.href = redirectUrl;
+        } else{
+            window.location.href = redirectUrl;
+        }
+    }
+}
+// window.onbeforeunload = function (e) {
+//     e = e || window.event;
+//     if (e) {        
+//         e.returnValue = 'Sure?';
+//     }
+// };
+window.addEventListener('beforeunload', function (e) {
+    if (!(sessionAction('check', 'duplicateBrowserTab'))) {
+        sessionAction('destroy','duplicateBrowserTab');
+    }else{
+        sessionAction('destroy','browserTabDetect');
+    }
+});
+function sessionAction(action, key, value){
+    var session;
+    // check whether the session exist or not
+    if (action === 'check') {
+        session = sessionStorage.getItem(key);
+         if (session) {
+             return false;
+         } else {
+             return true;
+         }
+    }
+    // to create session
+    if (action === 'create') {
+        sessionStorage.setItem(key,value)
+    }
+    // To destroy session
+    if (action ==='destroy') {
+        sessionStorage.removeItem(key);
+    }
+}
+</script>
+</html>
